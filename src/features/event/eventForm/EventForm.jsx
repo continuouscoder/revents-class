@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Segment, Form, Button } from 'semantic-ui-react'
 class EventForm extends Component {
   render() {
+    const {handleFormCancel} = this.props; {/* pros pulls in parent, in this case EventDashboard handleFormCancel */}
     return (
             <Segment>
               <Form>
@@ -28,7 +29,7 @@ class EventForm extends Component {
                 <Button positive type="submit">
                   Submit
                 </Button>
-                <Button type="button">Cancel</Button>
+                <Button type="button" onClick={handleFormCancel} >Cancel</Button>
               </Form>
             </Segment>
     )

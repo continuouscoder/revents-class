@@ -55,18 +55,48 @@ const eventsDashboard = [
   }
 ]
 
-
 class EventDashboard extends Component {
+  constructor(props){
+        {/* SETTING STATE:
+            The constructor and super are not explained, but docs say to use them.
+            I'll treat it as required boilerplate. 
+
+            this.state is setting state on changable events like what appears on the dashboard.
+            isOpen will be a boolean to set the creation form as open or closed.
+        */}
+    super(props)
+
+    this.state = {                
+      events: eventsDashboard,
+      visibility: false               
+    }
+
+    this.handleFormVisibility = this.handleFormVisibility.bind(this);
+    this.handleFormCancel = this.handleFormCancel.bind(this);
+  }
+
+  handleFormVisibility(){     {/* This function can attach to the button to display the form */}
+    this.setState({
+      visibility:true
+    })
+  }
+  handleFormCancel(){
+    this.setState({
+      visibility: false
+    })
+  }
+
   render() {
     return (
       <Grid>
           <Grid.Column width = {10}>  {/* Semantic UI uses a grid width of 16, so 10 on this column.... */}
             {/* <EventList/> : original mockup */}
-            <EventList events={eventsDashboard} />  {/* By pulling in events and defining them here, we can pass the values of the obj. to the EventsList */}
+            <EventList events={this.state.events} />  {/* Orig. code: EventList events={eventsDashboard} /> By pulling in events and defining them here, we can pass the values of the obj. to the EventsList */}
           </Grid.Column>
           <Grid.Column width = {6}>    {/** ...and 6 here completes the 16 width */}
-            <Button positive content='Create Event'></Button>
-            <EventForm/>
+            <Button positive content='Create Event' onClick={this.handleFormVisibility}/> {/* If you do a onClick={this.handleFormVisbility()} every time the form re-renders, then the page would re-render - we want to wait for it to get the click to oepn it */}
+            {this.state.visibility && 
+            <EventForm handleFormCancel = {this.handleFormCancel} />}     {/* This is the way we set the state to control the visibility of the form */}
           </Grid.Column>
       </Grid>
     )
