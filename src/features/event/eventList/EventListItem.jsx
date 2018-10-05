@@ -33,7 +33,9 @@ class EventListItem extends Component {
               </Segment>
               <Segment secondary>
                 <List horizontal>
-                    {event.attendees.map((attendee) => (
+                    {/* adding event.attendees && is like saying "do we have attendees?
+                  if no, it ignores adding empty attendees, if we have them, they are added." */}
+                    {event.attendees && event.attendees.map((attendee) => (
                         <EventListAttendee key={attendee.id} attendee={attendee}/>
                     ))}
                 </List>
