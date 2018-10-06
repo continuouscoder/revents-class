@@ -69,7 +69,8 @@ class EventDashboard extends Component {
 
     this.state = {                
       events: eventsDashboard,
-      visibility: false               
+      visibility: false,
+      selectedEvent: null               
     }
 
     this.handleFormVisibility = this.handleFormVisibility.bind(this);
@@ -78,7 +79,9 @@ class EventDashboard extends Component {
 
   handleFormVisibility(){     {/* This function can attach to the button to display the form */}
     this.setState({
+      selectedEvent: null,
       visibility:true
+      
     })
   }
   handleFormCancel = () =>{   {/* Here an arrow function is used instead of the boilerplate above */}
@@ -93,21 +96,32 @@ class EventDashboard extends Component {
     const updatedEvents = [...this.state.events, newEvent]  
     this.setState({
       events: updatedEvents,
-      isOpen: false
+      visibility: false
     })
+  }
+  handleEditEvent = (eventToUpdate) => () => {
+    console.log('click')
+    console.log(eventToUpdate)
+      {/* Why two arrow functions?  So we can pass a response back. So we are passing the event to update,
+      as well as the response back of what will be updated. */}
+      this.setState({
+        selectedEvent: eventToUpdate,
+        visibility: true
+      })
   }
 
   render() {
+    const selectedEvent = this.state;
     return (
       <Grid>
           <Grid.Column width = {10}>  {/* Semantic UI uses a grid width of 16, so 10 on this column.... */}
             {/* <EventList/> : original mockup */}
-            <EventList events={this.state.events} />  {/* Orig. code: EventList events={eventsDashboard} /> By pulling in events and defining them here, we can pass the values of the obj. to the EventsList */}
+            <EventList onEventEdit={this.handleEditEvent} events={this.state.events} />  {/* Orig. code: EventList events={eventsDashboard} /> By pulling in events and defining them here, we can pass the values of the obj. to the EventsList */}
           </Grid.Column>
           <Grid.Column width = {6}>    {/** ...and 6 here completes the 16 width */}
             <Button positive content='Create Event' onClick={this.handleFormVisibility}/> {/* If you do a onClick={this.handleFormVisbility()} every time the form re-renders, then the page would re-render - we want to wait for it to get the click to oepn it */}
             {this.state.visibility && 
-            <EventForm createEvent={this.handleCreateEvent} handleFormCancel = {this.handleFormCancel} />}     {/* This is the way we set the state to control the visibility of the form */}
+            <EventForm selectedEvent={selectedEvent} createEvent={this.handleCreateEvent} handleFormCancel = {this.handleFormCancel} />}     {/* This is the way we set the state to control the visibility of the form */}
           </Grid.Column>
       </Grid>
     )
